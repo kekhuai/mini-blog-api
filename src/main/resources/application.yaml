@@ -10,3 +10,10 @@ spring:
   h2:
     console:
       enabled: true
+  data:
+    rest:
+      base-path: api
+  flyway:
+    user: sa
+    url: jdbc:h2:mem:mini-blog-db
+    enabled: false

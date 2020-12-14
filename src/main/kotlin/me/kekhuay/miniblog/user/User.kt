@@ -1,48 +1,49 @@
 package me.kekhuay.miniblog.user
 
+import me.kekhuay.miniblog.audit.DateAudit
+import me.kekhuay.miniblog.role.Role
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
-import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
-@Table(name = "user", indexes = [Index(columnList = "username")])
+@Table(name = "users", indexes = [Index(columnList = "username")])
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long,
+    private val id: Long,
 
     @Column(name = "username", unique = true, nullable = false, length = 64)
-    val username: String,
+    private val username: String,
 
-    @Column(name = "password_hash", nullable = false, length = 128)
-    val passwordHash: String,
+    @Column(name = "password", nullable = false, length = 128)
+    private var password: String,
 
-    @Column(name = "created_at", nullable = false)
-    var createdAt: OffsetDateTime,
-
-    @Column(name = "updated_at", nullable = false)
-    var updatedAt: OffsetDateTime,
+    @ManyToMany
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id")]
+    )
+    private val roles: Set<Role>,
 
     @Version
-    val version: Long
-) : Persistable<Long>, Serializable {
+    private val version: Long
+) : Persistable<Long>, Serializable, DateAudit() {
+    constructor(username: String, passwordHash: String) :
+            this(
+                id = 0,
+                username = username,
+                password = passwordHash,
+                roles = emptySet<Role>(),
+                version = 0
+            )
+
     override fun getId(): Long {
         return id
     }
 
     override fun isNew(): Boolean {
-        return 0L != id
-    }
-
-    @PrePersist
-    fun prePersist() {
-        createdAt = OffsetDateTime.now()
-        updatedAt = OffsetDateTime.now()
-    }
-
-    @PreUpdate
-    fun preUpdate() {
-        updatedAt = OffsetDateTime.now()
+        return 0L == id
     }
 }
