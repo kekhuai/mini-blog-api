@@ -1,5 +1,7 @@
 package me.kekhuay.miniblog.auth
 
+import me.kekhuay.miniblog.auth.dto.JwtAuthenticationResponse
+import me.kekhuay.miniblog.auth.dto.SignInRequest
 import me.kekhuay.miniblog.auth.dto.SignUpRequest
 import me.kekhuay.miniblog.dto.ApiResponse
 import me.kekhuay.miniblog.exception.BadRequestException
@@ -17,8 +19,8 @@ import javax.validation.Valid
 class AuthController(
     private val authService: AuthService
 ) {
-    @PostMapping(path = ["/signup"])
-    fun register(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
+    @PostMapping(path = ["/sign-up"])
+    fun signUp(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
         try {
             val result = authService.signUp(signUpRequest)
             val location = ServletUriComponentsBuilder
@@ -35,5 +37,11 @@ class AuthController(
                 HttpStatus.BAD_REQUEST
             )
         }
+    }
+
+    @PostMapping(path = ["/sign-in"])
+    fun signIn(@Valid @RequestBody signInRequest: SignInRequest): ResponseEntity<*> {
+        val jwt = authService.signIn(signInRequest)
+        return ResponseEntity.ok(JwtAuthenticationResponse(jwt))
     }
 }

@@ -2,7 +2,7 @@ package me.kekhuay.miniblog.auth.dto
 
 import javax.validation.constraints.NotBlank
 
-data class LoginRequest(
+data class SignInRequest(
     @NotBlank
     val username: String,
 
