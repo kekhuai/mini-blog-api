@@ -2,7 +2,7 @@ package me.kekhuay.miniblog.auth
 
 import me.kekhuay.miniblog.auth.dto.SignUpRequest
 import me.kekhuay.miniblog.dto.ApiResponse
-import me.kekhuay.miniblog.user.UserService
+import me.kekhuay.miniblog.exception.BadRequestException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,22 +14,26 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping(path = ["/api/v1/auth"])
-class AuthController(private val service: UserService) {
+class AuthController(
+    private val authService: AuthService
+) {
     @PostMapping(path = ["/signup"])
     fun register(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
-        if (service.isUsernameAlreadyExists(signUpRequest.username)) {
+        try {
+            val result = authService.signUp(signUpRequest)
+            val location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/v1/users/{username}")
+                .buildAndExpand(result.username)
+                .toUri()
+            return ResponseEntity.created(location)
+                .body(ApiResponse(true, "User registered successfully"))
+        } catch (ex: BadRequestException) {
+            val message = ex.message ?: ""
             return ResponseEntity(
-                ApiResponse(false, "Username is already taken!"),
+                ApiResponse(false, message),
                 HttpStatus.BAD_REQUEST
             )
         }
-        val result = service.register(signUpRequest)
-        val location = ServletUriComponentsBuilder
-            .fromCurrentContextPath()
-            .path("/api/v1/users/{username}")
-            .buildAndExpand(result.username)
-            .toUri()
-        return ResponseEntity.created(location)
-            .body(ApiResponse(true, "User registered successfully"))
     }
 }
