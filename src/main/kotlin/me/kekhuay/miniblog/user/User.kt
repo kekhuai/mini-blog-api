@@ -11,13 +11,13 @@ import javax.persistence.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long,
+    val id: Long,
 
     @Column(name = "username", unique = true, nullable = false, length = 64)
-    private val username: String,
+    val username: String,
 
     @Column(name = "password", nullable = false, length = 128)
-    private var password: String,
+    var password: String,
 
     @ManyToMany
     @JoinTable(
@@ -25,17 +25,17 @@ data class User(
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
-    private val roles: Set<Role>,
+    var roles: Set<Role>,
 
     @Version
-    private val version: Long
+    val version: Long
 ) : Persistable<Long>, Serializable, DateAudit() {
     constructor(username: String, passwordHash: String) :
             this(
                 id = 0,
                 username = username,
                 password = passwordHash,
-                roles = emptySet<Role>(),
+                roles = emptySet(),
                 version = 0
             )
 

@@ -7,9 +7,9 @@ import javax.persistence.*
 data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long,
+    val id: Long,
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)
-    private val name: RoleName
+    val name: RoleName
 )

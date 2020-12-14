@@ -17,3 +17,10 @@ spring:
     user: sa
     url: jdbc:h2:mem:mini-blog-db
     enabled: false
+  jackson:
+    time-zone: UTC
+
+app:
+  jwt:
+    secret: JWTSuperSecretKey
+    expiration-in-ms: 604800000

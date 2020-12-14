@@ -1,16 +1,29 @@
 package me.kekhuay.miniblog.user
 
-import me.kekhuay.miniblog.user.dto.CreateUser
+import me.kekhuay.miniblog.exception.AppException
+import me.kekhuay.miniblog.role.Role
+import me.kekhuay.miniblog.role.RoleName
+import me.kekhuay.miniblog.role.RoleRepository
+import me.kekhuay.miniblog.auth.dto.SignUpRequest
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
-    private val repository: UserRepository
+    private val userRepository: UserRepository,
+    private val roleRepository: RoleRepository,
+    private val encoder: PasswordEncoder
 ) : UserService {
-    @Transactional
-    override fun register(dto: CreateUser): User {
-        val user = User(dto.username, dto.password)
-        return repository.save(user)
+    override fun isUsernameAlreadyExists(username: String): Boolean {
+        return userRepository.existsByUsername(username)
+    }
+
+    override fun register(request: SignUpRequest): User {
+        val user = User(request.username, encoder.encode(request.password))
+        val roles = HashSet<Role>(user.roles)
+        val userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow { AppException("User Role not set.") }
+        roles.add(userRole)
+        user.roles = roles
+        return userRepository.save(user)
     }
 }

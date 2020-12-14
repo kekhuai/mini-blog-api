@@ -1,7 +1,8 @@
 package me.kekhuay.miniblog.user
 
-import me.kekhuay.miniblog.user.dto.CreateUser
+import me.kekhuay.miniblog.auth.dto.SignUpRequest
 
 interface UserService {
-    fun register(dto: CreateUser): User
+    fun isUsernameAlreadyExists(username: String): Boolean
+    fun register(request: SignUpRequest): User
 }

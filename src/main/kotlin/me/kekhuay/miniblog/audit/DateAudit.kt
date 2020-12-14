@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.EntityListeners
 import javax.persistence.MappedSuperclass
@@ -16,9 +16,9 @@ import javax.persistence.MappedSuperclass
 abstract class DateAudit : Serializable {
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private val createdAt: OffsetDateTime = OffsetDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedDate
     @Column(nullable = false)
-    private val updatedAt: OffsetDateTime = OffsetDateTime.now()
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 }
