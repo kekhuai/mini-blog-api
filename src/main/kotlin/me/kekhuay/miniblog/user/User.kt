@@ -4,7 +4,17 @@ import me.kekhuay.miniblog.audit.DateAudit
 import me.kekhuay.miniblog.role.Role
 import org.springframework.data.domain.Persistable
 import java.io.Serializable
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Index
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.Table
+import javax.persistence.Version
 
 @Entity
 @Table(name = "users", indexes = [Index(columnList = "username")])
