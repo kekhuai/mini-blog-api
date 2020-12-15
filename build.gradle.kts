@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jwtVersion = "0.9.1"
 val validationApiVersion = "2.0.1.Final"
+val hibernateValidatorVersion = "6.1.6.Final"
 
 plugins {
     id("org.springframework.boot") version "2.4.1"
@@ -28,7 +29,6 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-hateoas")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.security:spring-security-test")
@@ -38,6 +38,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.jsonwebtoken:jjwt:$jwtVersion")
     implementation("javax.validation:validation-api:$validationApiVersion")
+    implementation("org.hibernate:hibernate-validator:$hibernateValidatorVersion")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

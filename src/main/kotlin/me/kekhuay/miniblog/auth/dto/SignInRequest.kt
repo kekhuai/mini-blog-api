@@ -4,8 +4,8 @@ import javax.validation.constraints.NotBlank
 
 data class SignInRequest(
     @NotBlank
-    val username: String,
+    val username: String?,
 
     @NotBlank
-    val password: String
+    val password: String?
 )

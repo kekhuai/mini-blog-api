@@ -27,7 +27,7 @@ class AuthServiceImpl(
     private val tokenProvider: JwtTokenProvider
 ) : AuthService {
     override fun signUp(signUpRequest: SignUpRequest): User {
-        if (userService.isUsernameAlreadyExists(signUpRequest.username)) {
+        if (userService.isUsernameAlreadyExists(signUpRequest.username!!)) {
             throw BadRequestException("Username is already taken!")
         }
         val user = User(signUpRequest.username, encoder.encode(signUpRequest.password))
