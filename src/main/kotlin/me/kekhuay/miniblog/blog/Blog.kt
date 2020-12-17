@@ -1,11 +1,15 @@
 package me.kekhuay.miniblog.blog
 
 import me.kekhuay.miniblog.audit.UserDateAudit
+import me.kekhuay.miniblog.user.User
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
@@ -16,16 +20,20 @@ data class Blog(
     val id: Long,
 
     @Column(name = "name", length = 128, nullable = false)
-    val name: String,
+    var name: String?,
 
     @Column(name = "status", length = 16, nullable = false)
-    val status: String,
+    var status: String?,
 
     @Column(name = "content", length = 1024)
-    val content: String?,
+    var content: String?,
 
     @Column(name = "category", length = 128)
-    val category: String?,
+    var category: String?,
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", referencedColumnName = "id", insertable = false, updatable = false)
+    val author: User?
 ) : UserDateAudit() {
     constructor(name: String, status: String, content: String?, category: String?) :
             this(
@@ -33,6 +41,7 @@ data class Blog(
                 name = name,
                 status = status,
                 content = content,
-                category = category
+                category = category,
+                author = null
             )
 }

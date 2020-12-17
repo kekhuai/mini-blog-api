@@ -1,5 +1,6 @@
 package me.kekhuay.miniblog.user
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import me.kekhuay.miniblog.audit.DateAudit
 import me.kekhuay.miniblog.role.Role
 import org.springframework.data.domain.Persistable
@@ -26,6 +27,7 @@ data class User(
     @Column(name = "username", unique = true, nullable = false, length = 64)
     val username: String,
 
+    @get:JsonIgnore
     @Column(name = "password", nullable = false, length = 128)
     var password: String,
 
@@ -38,6 +40,7 @@ data class User(
     var roles: Set<Role>,
 
     @Version
+    @get:JsonIgnore
     val version: Long
 ) : Persistable<Long>, Serializable, DateAudit() {
     constructor(username: String, passwordHash: String) :
@@ -53,6 +56,7 @@ data class User(
         return id
     }
 
+    @JsonIgnore
     override fun isNew(): Boolean {
         return 0L == id
     }

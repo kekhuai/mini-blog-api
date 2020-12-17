@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthServiceImpl(
@@ -26,6 +27,7 @@ class AuthServiceImpl(
     private val authenticationManager: AuthenticationManager,
     private val tokenProvider: JwtTokenProvider
 ) : AuthService {
+    @Transactional
     override fun signUp(signUpRequest: SignUpRequest): User {
         if (userService.isUsernameAlreadyExists(signUpRequest.username!!)) {
             throw BadRequestException("Username is already taken!")

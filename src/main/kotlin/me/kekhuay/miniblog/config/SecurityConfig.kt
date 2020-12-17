@@ -58,7 +58,8 @@ class SecurityConfig(
             ).permitAll()
             .antMatchers(
                 HttpMethod.GET,
-                "/api/v1/users/**"
+                "/api/v1/users/**",
+                "/api/v1/blogs/**"
             ).permitAll().anyRequest().authenticated()
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)

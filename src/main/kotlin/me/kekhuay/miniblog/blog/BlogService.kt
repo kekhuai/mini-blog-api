@@ -7,4 +7,7 @@ interface BlogService {
     fun create(blogRequest: BlogRequest): Blog
     fun delete(id: Long)
     fun isOwner(authentication: Authentication, id: Long): Boolean
+    fun read(): List<Blog>
+    fun readById(id: Long): Blog
+    fun update(id: Long, blogRequest: BlogRequest): Blog
 }

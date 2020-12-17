@@ -10,9 +10,6 @@ spring:
   h2:
     console:
       enabled: true
-  data:
-    rest:
-      base-path: api
   flyway:
     user: sa
     url: jdbc:h2:mem:mini-blog-db
@@ -22,5 +19,5 @@ spring:
 
 app:
   jwt:
-    secret: JWTSuperSecretKey
+    secret: ${random.value}
     expiration-in-ms: 604800000
